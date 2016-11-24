@@ -1,10 +1,8 @@
 from django.http import HttpResponse
+from django.template import loader
 
 
 def index(request):
-    return HttpResponse(
-        '<!DOCTYPE html>'
-        '<title>Coffee bar</title>'
-        '<h1>Coffee bar</h1>'
-        '<p>Hello, coffee bar visitor</p>'
-    )
+    template = loader.get_template('index.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
