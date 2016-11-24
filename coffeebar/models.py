@@ -8,6 +8,9 @@ class User(models.Model):
     name = models.CharField(max_length=150, blank=True)
     balance = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.name + ' (' + self.room + ')'
+
 
 class Account(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -21,6 +24,9 @@ class Product(models.Model):
     # TODO: add related_to field for nested products
     # related_to = models.ForeignKey(Product, parent_link=True)
     image = models.TextField(max_length=128, blank=True, default='none.png')
+
+    def __str__(self):
+        return self.name
 
 
 class Order(models.Model):
