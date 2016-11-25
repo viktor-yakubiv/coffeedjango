@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.utils import timezone
 
 
@@ -7,6 +8,9 @@ class Account(models.Model):
     OPENED = 0
     CLOSED = 1
     SUSPENDED = 2
+
+    # owner of account
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     # common fields (for login)
     username = models.CharField('Room number', max_length=8)
