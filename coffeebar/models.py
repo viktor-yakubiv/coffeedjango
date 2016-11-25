@@ -12,13 +12,6 @@ class Account(models.Model):
     # owner of account
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    # common fields (for login)
-    username = models.CharField('Room number', max_length=8)
-    password = models.CharField('PIN Code', max_length=12)
-
-    # meta data
-    owner_name = models.CharField(max_length=150, blank=True, null=True)
-
     # status of account
     #   typically look up only for open accounts
     status = models.IntegerField(choices=(
@@ -28,7 +21,10 @@ class Account(models.Model):
     ))
 
     def __str__(self):
-        return '%s (%s)' % (self.username, self.owner_name if self.owner_name != '' else 'Unknown')
+        display_name = 'Unknown'
+        if self.user.first_name or self.user.last_name:
+            display_name = (self.user.first_name + ' ' + self.user.last_name).strip()
+        return '%s (%s)' % (self.user.username, display_name)
 
 
 class Product(models.Model):
@@ -37,7 +33,7 @@ class Product(models.Model):
     image = models.CharField(max_length=128, blank=True)
 
     def __str__(self):
-        return '%s ($%f)' % (self.name, self.price)
+        return '%s ($%1.2f)' % (self.name, self.price)
 
 
 class Addon(models.Model):
@@ -61,15 +57,18 @@ class Order(models.Model):
 
 
 class Drink(models.Model):
-    product = models.OneToOneField(Product, on_delete=models.CASCADE, primary_key=True)
-
-    # group of product with list of variants
-    group = models.TextField('Drink group', editable=False, choices=[
+    # drink groups
+    categories = [
         ('Hot Coffee',  'Hot Coffee'),
         ('Cold Coffee', 'Cold Coffee'),
         ('Hot Tea',     'Hot Tea'),
         ('Cold Tea',    'Cold Tea'),
-    ])
+    ]
+
+    product = models.OneToOneField(Product, on_delete=models.CASCADE, primary_key=True)
+
+    # group of product with list of variants
+    category = models.TextField('Drink group', editable=False, choices=categories)
 
     # sugar:
     #   priority for sorting: higher on top
@@ -77,10 +76,10 @@ class Drink(models.Model):
     priority = models.IntegerField(default=0)
 
     # addons for the product
-    addons = models.ManyToManyField(Addon)
+    addons = models.ManyToManyField(Addon, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.product.name
 
 
 class OrderItem(models.Model):

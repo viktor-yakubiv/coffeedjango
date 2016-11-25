@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% block content %}
     <header class="header">
         <nav class="navbar navbar-fixed-top">
@@ -15,7 +16,23 @@
 
     <div class="container">
         <div class="row flex-items-xs-top">
-            <div class="col-xs-12 col-sm-7 col-lg-8">Product list</div>
+            <div class="col-xs-12 col-sm-7 col-lg-8">
+                <div class="row flex-items-xs-top">
+                    {% for drink in drinks %}
+                        <div class="col-xs-6 col-md-4">
+                            <div class="card">
+                                <img class="card-img-top"
+                                     src="{% static drink.product.image %}" alt="{{ drink.product.name }}">
+                                <div class="card-block">
+                                    <h4 class="card-title">{{ drink.product.name }}</h4>
+                                    <p class="card-subtitle text-muted">$&nbsp;{{ drink.product.price }}</p>
+                                    <button class="btn btn-primary btn-block">Add to order</button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
             <div class="col-xs-12 col-sm-5 col-lg-4">Cart</div>
         </div>
     </div>
