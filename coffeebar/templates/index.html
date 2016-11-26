@@ -1,62 +1,71 @@
-{% extends 'base.html' %}
+{% extends 'layouts/base.html' %}
 
 {% load static %}
+
 {% block content %}
-    <header class="header">
-        <nav class="navbar navbar-fixed-top">
-            <div class="container">
-                <ul class="nav navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="">Orders</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
 
-    <div class="container">
-        <div class="row flex-items-xs-top">
-            <div class="col-xs-12 col-sm-7 col-lg-8">
-                <div class="row flex-items-xs-top">
-                    {% for drink in drinks %}
-                        <div class="col-xs-6 col-md-4">
-                            <div class="card">
-                                {% if drink.product.image %}
-                                    <img class="card-img-top"
-                                         src="{% static drink.product.image %}" alt="{{ drink.product.name }}">
-                                {% endif %}
-                                <div class="card-block">
-                                    <h4 class="card-title">{{ drink.product.name }}</h4>
-                                    <p class="card-subtitle text-muted">$&nbsp;{{ drink.product.price|floatformat:2 }}</p>
-                                    <button class="btn btn-primary btn-block order-btn">Add to order</button>
-                                </div>
+    <div class="row flex-items-xs-top">
+        <div class="col-xs-12 col-md-7 col-lg-8">
+            <div class="row flex-items-xs-top">
+                {% for drink in drinks %}
+                    <div class="col-xs-12 col-sm-6 col-lg-4">
+                        <form class="card" method="post" action="{% url 'order_add' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ drink.product.id }}">
+
+                            {% if drink.product.image %}
+                                <img class="card-img-top"
+                                     src="{% static drink.product.image %}" alt="{{ drink.product.name }}">
+                            {% endif %}
+
+                            <div class="card-block">
+                                <h4 class="card-title">{{ drink.product.name }}</h4>
+                                <p class="card-subtitle text-muted">${{ drink.product.price|floatformat:2 }}</p>
                             </div>
-                        </div>
-                    {% endfor %}
-{#                    {% for drink in products %}#}
-{#                        <div class="col-xs-6 col-md-4">#}
-{#                            <div class="product">#}
-{#                                <div class="product-image">#}
-{#                                    <img src="{% static drink.product.image %}" alt="{{ drink.product.name }}">#}
-{#                                </div>#}
-{#                                <div class="product-content">#}
-{#                                    <h4 class="product-title">{{ drink.product.name }}</h4>#}
-{#                                    <p class="product-price">{{ drink.product.price }}</p>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    {% endfor %}#}
 
-                </div>
+                            <ul class="list-group list-group-flush">
+                                {% for addon in drink.get_addons %}
+                                    <li class="list-group-item">
+                                        <label class="custom-control custom-checkbox mb-0 d-block clearfix">
+                                            <input class="custom-control-input" type="checkbox" name="addons" value="{{ addon.product.id }}">
+                                            <span class="custom-control-indicator"></span>
+                                            <span class="custom-control-description">{{ addon.product.name }}</span>
+                                            <span class="text-muted float-xs-right">${{ addon.product.price|floatformat:2 }}</span>
+                                        </label>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+
+                            <div class="card-block">
+                                <button class="btn btn-primary btn-block order-btn" type="submit">Add to order</button>
+                            </div>
+                        </form>
+                    </div>
+                {% endfor %}
             </div>
-            <div class="col-xs-12 col-sm-5 col-lg-4">
-                <div class="card cart">
+        </div>
+
+        <div class="col-xs-12 col-sm-5 col-lg-4">
+            <div class="card cart">
+                <div class="card-block">
+                    <h2 class="card-title cart-title">Order</h2>
+                </div>
+{#                {% if order.get_items %}#}
+{#                    <ul class="list-group list-group-flushed">#}
+{#                        {% for item in order.get_items %}#}
+{#                            <li class="list-group-item">#}
+{#                                <span>{{ item.product.name }}</span>#}
+{#                            </li>#}
+{#                        {% endfor %}#}
+{#                    </ul>#}
+{#                {% else %}#}
                     <div class="card-block">
-                        <h2 class="card-title cart-title">Order</h2>
                         <p class="card-text">You have not chosen anything</p>
                     </div>
+{#                {% endif %}#}
                 </div>
             </div>
         </div>
     </div>
+
 {% endblock %}

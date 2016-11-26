@@ -1,0 +1,49 @@
+<!doctype html>
+
+{% load static %}
+
+<html class="no-js" lang="en">
+<head>
+        {% include '../partials/head/meta.html' %}
+
+        <title>Air Coffee</title>
+
+        {% include '../partials/head/links.html' %}
+    </head>
+    <body>
+        {% include '../partials/browser.html' %}
+
+        {% load static %}
+        <main class="main pt-3 mt-3">
+            <header class="header">
+                <nav class="navbar navbar-light bg-primary navbar-fixed-top navbar-full">
+                    <div class="container">
+                        {% load urls %}
+                        <div class="nav navbar-nav">
+                            <a class="nav-item btn btn-outline-primary {% active request 'index' %}" href="{% url 'index' %}">Make order</a>
+                            <a class="nav-item nav-link {% active request 'order_list' %}" href="{% url 'order_list' %}">Orders</a>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+
+            <div class="container">
+                {% block content %}
+                    <p>Hello world! This is HTML5 Boilerplate.</p>
+                {% endblock %}
+            </div>
+
+            <footer class="footer navbar navbar-dark text-white">
+                <div class="container">
+                    <span class="copy float-sm-left">© {% now 'Y' %} Air Coffee</span>
+                    <a class="author float-sm-right" href="http://www.yakubiv.com">www.yakubiv.com</a>
+                </div>
+            </footer>
+        </main>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
+    </body>
+</html>

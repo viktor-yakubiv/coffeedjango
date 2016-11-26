@@ -26,6 +26,18 @@ class Account(models.Model):
             display_name = (self.user.first_name + ' ' + self.user.last_name).strip()
         return '%s (%s)' % (self.user.username, display_name)
 
+    def get_orders(self):
+        try:
+            return Order.objects.get(account=self)
+        except (KeyError, Order.DoesNotExist):
+            return []
+
+    def get_active_order(self):
+        try:
+            return Order.objects.get(account=self, status=Order.NEW)
+        except (KeyError, Order.DoesNotExist):
+            return None
+
 
 class Product(models.Model):
     name = models.CharField(max_length=150)
@@ -41,22 +53,6 @@ class Addon(models.Model):
 
     def __str__(self):
         return str(self.product)
-
-
-class Order(models.Model):
-    # order statuses
-    NEW = 0
-    PROCESSING = 1
-    DONE = 2
-
-    # fields
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    datetime = models.DateTimeField(default=timezone.now)
-    status = models.IntegerField(default=NEW, choices=(
-        (NEW, 'New'),
-        (PROCESSING, 'Processing'),
-        (DONE, 'Done')
-    ))
 
 
 class Drink(models.Model):
@@ -81,14 +77,46 @@ class Drink(models.Model):
     # addons for the product
     addons = models.ManyToManyField(Addon, blank=True)
 
+    def get_addons(self):
+        return self.addons.all()
+
     def __str__(self):
         return str(self.product)
+
+
+class Order(models.Model):
+    # order statuses
+    NEW = 0
+    WAITING = 1
+    PROCESSING = 2
+    DONE = 3
+
+    # fields
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    datetime = models.DateTimeField(default=timezone.now)
+    status = models.IntegerField(default=NEW, choices=(
+        (NEW, 'New'),
+        (WAITING, 'Waiting'),
+        (PROCESSING, 'Processing'),
+        (DONE, 'Done')
+    ))
+
+    def get_items(self):
+        return OrderItem.objects.get(order=self, parent=None)
 
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
+    parent = models.ForeignKey('self', blank=True, null=True)
+
+    def get_related(self):
+        try:
+            related = OrderItem.objects.get(parent=self)
+        except (KeyError, OrderItem.DoesNotExist):
+            related = []
+        return related
 
     def __str__(self):
         return '%s: %d (%1.2f)' % (self.product.name, self.quantity, self.quantity * self.product.price)

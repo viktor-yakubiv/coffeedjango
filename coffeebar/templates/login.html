@@ -1,50 +1,38 @@
-{% extends 'base.html' %}
+{% extends 'layouts/info.html' %}
 
 {% load static %}
 
 {% block content %}
 
-    <div class="container container-center-content">
-        <div class="row flex-items-sm-center flex-items-sm-middle">
-            <div class="col-sm-5">
-                <a class="brand-image brand-image-large" href="{% url 'index' %}">
-                    <img src="{% static 'images/logo.svg' %}" alt="Air Coffee">
-                </a>
-            </div>
+    <h1>Welcome</h1>
 
-            <div class="col-sm-7 card card-block">
-                <h1>Welcome</h1>
-
-                {% if form.errors %}
-                    <div class="alert alert-danger">
-                        <ul>
-                            {% for error in form.subject.errors %}
-                                <li>{{ error|escape }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-
-                <form method="post" action="{% url 'login' %}">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="room-field">Room Number</label>
-                        <input class="form-control" id="room-field" type="text" name="username" maxlength="254"
-                               placeholder="254" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="pin-field">PIN Code</label>
-                        <input class="form-control" id="pin-field" name="password" type="password"
-                               placeholder="1111" required>
-                    </div>
-
-                    <input class="btn btn-primary btn-block" type="submit" value="Log in" >
-
-                    <input type="hidden" name="next" value="{{ next }}"/>
-                </form>
-            </div>
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <ul>
+                {% for error in form.subject.errors %}
+                    <li>{{ error|escape }}</li>
+                {% endfor %}
+            </ul>
         </div>
-    </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="room-field">Room Number</label>
+            <input class="form-control" id="room-field" type="text" name="username" maxlength="254"
+                   placeholder="254" required>
+        </div>
+
+        <div class="form-group">
+            <label for="pin-field">PIN Code</label>
+            <input class="form-control" id="pin-field" name="password" type="password"
+                   placeholder="1111" required>
+        </div>
+
+        <input class="btn btn-primary btn-block" type="submit" value="Log in" >
+
+        <input type="hidden" name="next" value="{{ next }}"/>
+    </form>
 
 {% endblock %}
