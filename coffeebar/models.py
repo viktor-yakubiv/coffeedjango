@@ -39,6 +39,9 @@ class Product(models.Model):
 class Addon(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE, primary_key=True)
 
+    def __str__(self):
+        return str(self.product)
+
 
 class Order(models.Model):
     # order statuses
@@ -79,10 +82,13 @@ class Drink(models.Model):
     addons = models.ManyToManyField(Addon, blank=True)
 
     def __str__(self):
-        return self.product.name
+        return str(self.product)
 
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
+
+    def __str__(self):
+        return '%s: %d (%1.2f)' % (self.product.name, self.quantity, self.quantity * self.product.price)
