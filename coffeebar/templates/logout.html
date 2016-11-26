@@ -1,7 +1,21 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
-    <div class="container-narrow">
-        <p>You are logged out.</p>
+
+    <div class="container container-center-content">
+        <div class="row flex-items-sm-center flex-items-sm-middle">
+            <div class="col-sm-5">
+                <a class="brand-image brand-image-large" href="{% url 'index' %}">
+                    <img src="{% static 'images/logo.svg' %}" alt="Air Coffee">
+                </a>
+            </div>
+
+            <div class="col-sm-7">
+                <div class="alert alert-info">You are logged out</div>
+            </div>
+        </div>
     </div>
+
 {% endblock %}

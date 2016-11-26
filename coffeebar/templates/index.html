@@ -21,19 +21,42 @@
                     {% for drink in drinks %}
                         <div class="col-xs-6 col-md-4">
                             <div class="card">
-                                <img class="card-img-top"
-                                     src="{% static drink.product.image %}" alt="{{ drink.product.name }}">
+                                {% if drink.product.image %}
+                                    <img class="card-img-top"
+                                         src="{% static drink.product.image %}" alt="{{ drink.product.name }}">
+                                {% endif %}
                                 <div class="card-block">
                                     <h4 class="card-title">{{ drink.product.name }}</h4>
-                                    <p class="card-subtitle text-muted">$&nbsp;{{ drink.product.price }}</p>
-                                    <button class="btn btn-primary btn-block">Add to order</button>
+                                    <p class="card-subtitle text-muted">$&nbsp;{{ drink.product.price|floatformat:2 }}</p>
+                                    <button class="btn btn-primary btn-block order-btn">Add to order</button>
                                 </div>
                             </div>
                         </div>
                     {% endfor %}
+{#                    {% for drink in products %}#}
+{#                        <div class="col-xs-6 col-md-4">#}
+{#                            <div class="product">#}
+{#                                <div class="product-image">#}
+{#                                    <img src="{% static drink.product.image %}" alt="{{ drink.product.name }}">#}
+{#                                </div>#}
+{#                                <div class="product-content">#}
+{#                                    <h4 class="product-title">{{ drink.product.name }}</h4>#}
+{#                                    <p class="product-price">{{ drink.product.price }}</p>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    {% endfor %}#}
+
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-5 col-lg-4">Cart</div>
+            <div class="col-xs-12 col-sm-5 col-lg-4">
+                <div class="card cart">
+                    <div class="card-block">
+                        <h2 class="card-title cart-title">Order</h2>
+                        <p class="card-text">You have not chosen anything</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

@@ -1,0 +1,57 @@
+body {
+  background-attachment: fixed;
+  background-image: url(../images/brown-backgroung.jpg);
+  background-position: center;
+  background-size: cover;
+}
+
+
+// Typography
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: $font-family-headings;
+  font-weight: 400;
+  //text-transform: lowercase;
+}
+
+
+// Layout
+
+html,
+body {
+  height: 100%;
+}
+
+html {
+  display: table;
+  margin: auto;
+}
+
+body {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+//.container-center-content {
+//  min-height: 100%;
+//  display: flex;
+//  flex-direction: column;
+//  justify-content: center;
+//
+//  > * {
+//    width: 100%;
+//    box-sizing: border-box;
+//  }
+//}
+
+
+// Brand images
+
+.brand-image img {
+  display: block;
+}
+
+.brand-image-large img {
+  max-height: 80vh;
+}
