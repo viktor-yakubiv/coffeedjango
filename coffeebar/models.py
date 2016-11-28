@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Sum
 from django.utils import timezone
 
 
@@ -15,28 +16,35 @@ class Account(models.Model):
     # status of account
     #   typically look up only for open accounts
     status = models.IntegerField(choices=(
-        (OPENED,    'Opened'),
-        (CLOSED,    'Closed'),
+        (OPENED, 'Opened'),
+        (CLOSED, 'Closed'),
         (SUSPENDED, 'Suspended'),
     ))
 
     def __str__(self):
+        User.l
         display_name = 'Unknown'
         if self.user.first_name or self.user.last_name:
             display_name = (self.user.first_name + ' ' + self.user.last_name).strip()
         return '%s (%s)' % (self.user.username, display_name)
 
-    def get_orders(self):
-        try:
-            return Order.objects.get(account=self)
-        except (KeyError, Order.DoesNotExist):
-            return []
+    @staticmethod
+    def for_user(user):
+        return Account.objects.get(user=user, status=Account.OPENED)
 
-    def get_active_order(self):
+    def new_order(self):
         try:
             return Order.objects.get(account=self, status=Order.NEW)
         except (KeyError, Order.DoesNotExist):
-            return None
+            order = Order(account=self, status=Order.NEW)
+            order.save()
+            return order
+
+    def list_orders(self):
+        try:
+            return Order.objects.filter(account=self).order_by('-datetime')
+        except (KeyError, Order.DoesNotExist):
+            return []
 
 
 class Product(models.Model):
@@ -48,7 +56,7 @@ class Product(models.Model):
         return '%s ($%1.2f)' % (self.name, self.price)
 
 
-class Addon(models.Model):
+class Topping(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE, primary_key=True)
 
     def __str__(self):
@@ -56,32 +64,17 @@ class Addon(models.Model):
 
 
 class Drink(models.Model):
-    # drink groups
-    categories = [
-        ('Hot Coffee',  'Hot Coffee'),
-        ('Cold Coffee', 'Cold Coffee'),
-        ('Hot Tea',     'Hot Tea'),
-        ('Cold Tea',    'Cold Tea'),
-    ]
-
     product = models.OneToOneField(Product, on_delete=models.CASCADE, primary_key=True)
+    toppings = models.ManyToManyField(Topping, blank=True)
 
-    # group of product with list of variants
-    category = models.TextField('Drink group', editable=False, choices=categories)
-
-    # sugar:
-    #   priority for sorting: higher on top
-    #   image filename for front-end
+    # priority for sorting: higher on top
     priority = models.IntegerField(default=0)
-
-    # addons for the product
-    addons = models.ManyToManyField(Addon, blank=True)
-
-    def get_addons(self):
-        return self.addons.all()
 
     def __str__(self):
         return str(self.product)
+
+    def get_toppings(self):
+        return self.toppings.all()
 
 
 class Order(models.Model):
@@ -101,8 +94,15 @@ class Order(models.Model):
         (DONE, 'Done')
     ))
 
+    def __str__(self):
+        return '%d from %s' % (self.id, self.datetime)
+
     def get_items(self):
-        return OrderItem.objects.get(order=self, parent=None)
+        return OrderItem.objects.filter(order=self, parent=None)
+
+    def total(self):
+        order_total = OrderItem.objects.filter(order=self).aggregate(Sum('product__price'))['product__price__sum']
+        return order_total if order_total else 0.00
 
 
 class OrderItem(models.Model):
@@ -111,12 +111,17 @@ class OrderItem(models.Model):
     quantity = models.IntegerField(default=1)
     parent = models.ForeignKey('self', blank=True, null=True)
 
+    def __str__(self):
+        return '%s: %d (%1.2f)' % (self.product.name, self.quantity, self.quantity * self.product.price)
+
     def get_related(self):
         try:
-            related = OrderItem.objects.get(parent=self)
+            related = OrderItem.objects.filter(parent=self)
         except (KeyError, OrderItem.DoesNotExist):
             related = []
         return related
 
-    def __str__(self):
-        return '%s: %d (%1.2f)' % (self.product.name, self.quantity, self.quantity * self.product.price)
+    def total(self):
+        toppings_price = self.get_related().aggregate(Sum('product__price'))['product__price__sum']
+        return self.product.price + (toppings_price if toppings_price else 0.00)
+

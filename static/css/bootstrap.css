@@ -261,7 +261,7 @@ html {
   -webkit-tap-highlight-color: transparent; }
 
 body {
-  background-color: #795548;
+  background-color: #4e342e;
   color: #373a3c;
   font-size: 1rem;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -535,7 +535,7 @@ mark,
   height: auto;
   border: 1px solid #ddd;
   border-radius: 0.25rem;
-  background-color: #795548;
+  background-color: #4e342e;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075);
   -webkit-transition: all .2s ease-in-out;
   transition: all .2s ease-in-out; }
@@ -1413,7 +1413,7 @@ mark,
   .table tbody + tbody {
     border-top: 2px solid #eceeef; }
   .table .table {
-    background-color: #795548; }
+    background-color: #4e342e; }
 
 .table-sm th,
 .table-sm td {
@@ -2612,7 +2612,7 @@ tbody.collapse.in {
   .nav-tabs .nav-item.open .nav-link:focus,
   .nav-tabs .nav-item.open .nav-link:hover {
     border-color: #ddd #ddd transparent;
-    background-color: #795548;
+    background-color: #4e342e;
     color: #55595c; }
   .nav-tabs .dropdown-menu {
     margin-top: -1px;

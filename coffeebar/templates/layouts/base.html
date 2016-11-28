@@ -16,12 +16,43 @@
         {% load static %}
         <main class="main pt-3 mt-3">
             <header class="header">
-                <nav class="navbar navbar-light bg-primary navbar-fixed-top navbar-full">
+                <nav class="navbar navbar-light bg-primary navbar-fixed-top navbar-full header-navbar">
                     <div class="container">
+                        <a class="navbar-brand" href="{% url 'coffeebar:index' %}">
+                            <img src="{% static 'images/logo.svg' %}" width="30" alt="Air Coffee">
+                        </a>
+
                         {% load urls %}
                         <div class="nav navbar-nav">
-                            <a class="nav-item btn btn-outline-primary {% active request 'index' %}" href="{% url 'index' %}">Make order</a>
-                            <a class="nav-item nav-link {% active request 'order_list' %}" href="{% url 'order_list' %}">Orders</a>
+                            <a class="nav-item btn btn-primary {% active request 'coffeebar:index' %}" href="{% url 'coffeebar:index' %}">Coffee Menu</a>
+                            <a class="nav-item nav-link {% active request 'coffeebar:order_list' %}" href="{% url 'coffeebar:order_list' %}">Orders</a>
+
+                            {% if request.user %}
+                                <div class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="http://example.com"
+                                       id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                                       aria-expanded="false">
+                                        Administration
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        <a class="dropdown-item" href="#">Orders</a>
+                                        <a class="dropdown-item" href="#">Accounts</a>
+                                        <a class="dropdown-item" href="#">Products</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="nav float-xs-right">
+                            <div class="nav-item dropdown">
+                                <button class="nav-link btn btn-primary dropdown-toggle" id="usermenu-dropdown"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{ request.user.username }}
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="usermenu-dropdown">
+                                    <a class="dropdown-item" href="{% url 'coffeebar:logout' %}">Logout</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </nav>

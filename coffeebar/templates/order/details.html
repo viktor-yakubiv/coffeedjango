@@ -1,0 +1,21 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-block">
+            <h1>Current order</h1>
+        </div>
+        <div class="card-block">
+            {% for item in items %}
+                {% include '../partials/order/item-detailed.html' %}
+            {% endfor %}
+        </div>
+        <div class="card-block">
+            <form method="post" action="{% url 'coffeebar:order_checkout' %}">
+                {% csrf_token %}
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Checkout</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

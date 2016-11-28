@@ -1,0 +1,15 @@
+{% extends 'layouts/info.html' %}
+
+{% block content %}
+
+    <div class="alert alert-info">
+        <h1>Error occur</h1>
+
+        <ul>
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}

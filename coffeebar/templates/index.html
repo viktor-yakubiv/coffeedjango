@@ -9,13 +9,16 @@
             <div class="row flex-items-xs-top">
                 {% for drink in drinks %}
                     <div class="col-xs-12 col-sm-6 col-lg-4">
-                        <form class="card" method="post" action="{% url 'order_add' %}">
+                        <form class="card" action="{% url 'coffeebar:order_add' %}">
                             {% csrf_token %}
                             <input type="hidden" name="product_id" value="{{ drink.product.id }}">
 
                             {% if drink.product.image %}
-                                <img class="card-img-top"
-                                     src="{% static drink.product.image %}" alt="{{ drink.product.name }}">
+                                <div class="card-block">
+                                    <div class="product-image">
+                                        <img src="{% static drink.product.image %}" alt="{{ drink.product.name }}">
+                                    </div>
+                                </div>
                             {% endif %}
 
                             <div class="card-block">
@@ -24,13 +27,13 @@
                             </div>
 
                             <ul class="list-group list-group-flush">
-                                {% for addon in drink.get_addons %}
+                                {% for topping in drink.get_toppings %}
                                     <li class="list-group-item">
                                         <label class="custom-control custom-checkbox mb-0 d-block clearfix">
-                                            <input class="custom-control-input" type="checkbox" name="addons" value="{{ addon.product.id }}">
+                                            <input class="custom-control-input" type="checkbox" name="toppings" value="{{ topping.product.id }}">
                                             <span class="custom-control-indicator"></span>
-                                            <span class="custom-control-description">{{ addon.product.name }}</span>
-                                            <span class="text-muted float-xs-right">${{ addon.product.price|floatformat:2 }}</span>
+                                            <span class="custom-control-description">{{ topping.product.name }}</span>
+                                            <span class="text-muted float-xs-right">${{ topping.product.price|floatformat:2 }}</span>
                                         </label>
                                     </li>
                                 {% endfor %}
@@ -48,22 +51,27 @@
         <div class="col-xs-12 col-sm-5 col-lg-4">
             <div class="card cart">
                 <div class="card-block">
-                    <h2 class="card-title cart-title">Order</h2>
+                    <h2 class="card-title cart-title d-inline-block">Order</h2>
                 </div>
-{#                {% if order.get_items %}#}
-{#                    <ul class="list-group list-group-flushed">#}
-{#                        {% for item in order.get_items %}#}
-{#                            <li class="list-group-item">#}
-{#                                <span>{{ item.product.name }}</span>#}
-{#                            </li>#}
-{#                        {% endfor %}#}
-{#                    </ul>#}
-{#                {% else %}#}
+                {% if order.get_items %}
+                    <ul class="list-group list-group-flush">
+                        {% for item in order.get_items %}
+                            {% include 'partials/order/item.html' %}
+                        {% endfor %}
+                    </ul>
+
+                    <div class="card-block">
+                        <form action="{% url 'coffeebar:order_checkout' %}">
+                            {% csrf_token %}
+                            <button class="btn btn-primary">Checkout</button>
+                            <a class="btn btn-link" href="{% url 'coffeebar:order' %}">Details</a>
+                        </form>
+                    </div>
+                {% else %}
                     <div class="card-block">
                         <p class="card-text">You have not chosen anything</p>
                     </div>
-{#                {% endif %}#}
-                </div>
+                {% endif %}
             </div>
         </div>
     </div>

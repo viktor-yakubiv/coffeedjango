@@ -2,25 +2,26 @@
 
 {% load static %}
 
-<html class="no-js" lang="en">
-<head>
+<html class="no-js content-middle" lang="en">
+    <head>
         {% include '../partials/head/meta.html' %}
 
         <title>Air Coffee | Info</title>
 
         {% include '../partials/head/links.html' %}
     </head>
-    <body>
+
+    <body class="content-middle-inner">
         <main class="main">
             <div class="container container-center-content">
                 <div class="row flex-items-sm-center flex-items-sm-middle">
-                    <div class="col-sm-5">
-                        <a class="brand-image brand-image-large" href="{% url 'index' %}">
+                    <div class="col-sm-5 mb-3">
+                        <a class="brand-image brand-image-large" href="{% url 'coffeebar:index' %}">
                             <img src="{% static 'images/logo.svg' %}" alt="Air Coffee">
                         </a>
                     </div>
 
-                    <div class="col-sm-7 card card-block">
+                    <div class="col-sm-7">
                         {% block content %}
                             <h1>Hello, World!</h1>
                         {% endblock %}

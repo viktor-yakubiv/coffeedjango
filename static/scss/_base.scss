@@ -18,32 +18,45 @@ h1, h2, h3, h4, h5, h6,
 
 // Layout
 
-html,
-body {
+.content-middle,
+.content-middle-inner {
   height: 100%;
 }
 
-html {
+.content-middle {
   display: table;
   margin: auto;
 }
 
-body {
+.content-middle-inner {
   display: table-cell;
   vertical-align: middle;
 }
 
-//.container-center-content {
-//  min-height: 100%;
-//  display: flex;
-//  flex-direction: column;
-//  justify-content: center;
-//
-//  > * {
-//    width: 100%;
-//    box-sizing: border-box;
-//  }
-//}
+
+// Header
+
+.header-navbar {
+  box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
+}
+
+.navbar-brand {
+  position: relative;
+  top: -$navbar-padding-y;
+  margin-top: -1px;
+  margin-bottom: -(2 * $navbar-padding-y + $spacer);
+  padding: $spacer / 2;
+  height: 2 * $navbar-padding-y + $spacer + 2.25rem;
+  background: $body-bg url(../images/brown-backgroung.jpg) no-repeat center;
+  border: 1px solid $brand-primary;
+  border-radius: 0 0 $navbar-border-radius $navbar-border-radius;
+
+  img {
+    display: block;
+    width: auto;
+    height: 100%;
+  }
+}
 
 
 // Brand images

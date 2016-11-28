@@ -17,19 +17,22 @@
     left: 0;
     z-index: 1;
     display: block;
-    border: $border-width solid $gray-lighter;
+    //border: $border-width solid $gray-lighter;
+    background: $body-bg url(../images/brown-backgroung.jpg) center no-repeat;
     border-radius: 50%;
     box-shadow: $btn-box-shadow;
   }
 
   img {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    top: 15%;
+    //right: 0;
+    //bottom: 0;
+    left: 15%;
+    z-index: 1;
     display: block;
-    border-radius: 50%;
+    width: 70%;
+    height: 70%;
     object-fit: contain;
     object-position: center;
   }

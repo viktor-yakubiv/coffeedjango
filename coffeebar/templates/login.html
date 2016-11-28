@@ -4,35 +4,37 @@
 
 {% block content %}
 
-    <h1>Welcome</h1>
+    <div class="card card-block">
+        <h1>Welcome</h1>
 
-    {% if form.errors %}
-        <div class="alert alert-danger">
-            <ul>
-                {% for error in form.subject.errors %}
-                    <li>{{ error|escape }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for error in form.subject.errors %}
+                        <li>{{ error|escape }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
 
-    <form method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="room-field">Room Number</label>
-            <input class="form-control" id="room-field" type="text" name="username" maxlength="254"
-                   placeholder="254" required>
-        </div>
+        <form method="post" action="{% url 'coffeebar:login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="room-field">Room Number</label>
+                <input class="form-control" id="room-field" type="text" name="username" maxlength="254"
+                       placeholder="254" required>
+            </div>
 
-        <div class="form-group">
-            <label for="pin-field">PIN Code</label>
-            <input class="form-control" id="pin-field" name="password" type="password"
-                   placeholder="1111" required>
-        </div>
+            <div class="form-group">
+                <label for="pin-field">PIN Code</label>
+                <input class="form-control" id="pin-field" name="password" type="password"
+                       placeholder="1111" required>
+            </div>
 
-        <input class="btn btn-primary btn-block" type="submit" value="Log in" >
+            <input class="btn btn-primary btn-block" type="submit" value="Log in" >
 
-        <input type="hidden" name="next" value="{{ next }}"/>
-    </form>
+            <input type="hidden" name="next" value="{{ next }}"/>
+        </form>
+    </div>
 
 {% endblock %}

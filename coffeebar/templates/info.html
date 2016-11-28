@@ -1,0 +1,13 @@
+{% extends 'layouts/info.html' %}
+
+{% block content %}
+
+    <div class="alert alert-info">
+        <ul class="mb-0">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}

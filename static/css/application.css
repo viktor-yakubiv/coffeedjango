@@ -15,17 +15,35 @@ h1, h2, h3, h4, h5, h6,
   font-weight: 400;
   font-family: "Poiret One", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
 
-html,
-body {
+.content-middle,
+.content-middle-inner {
   height: 100%; }
 
-html {
+.content-middle {
   display: table;
   margin: auto; }
 
-body {
+.content-middle-inner {
   display: table-cell;
   vertical-align: middle; }
+
+.header-navbar {
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28); }
+
+.navbar-brand {
+  position: relative;
+  top: -0.5rem;
+  margin-top: -1px;
+  margin-bottom: -2rem;
+  padding: 0.5rem;
+  height: 4.25rem;
+  border: 1px solid #faaf40;
+  border-radius: 0 0 0.25rem 0.25rem;
+  background: #4e342e url(../images/brown-backgroung.jpg) no-repeat center; }
+  .navbar-brand img {
+    display: block;
+    width: auto;
+    height: 100%; }
 
 .brand-image img {
   display: block; }
@@ -45,18 +63,18 @@ body {
     left: 0;
     z-index: 1;
     display: block;
-    border: 0.5rem solid #eceeef;
     border-radius: 50%;
+    background: #4e342e url(../images/brown-backgroung.jpg) center no-repeat;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
     content: ""; }
   .product-image img {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    top: 15%;
+    left: 15%;
+    z-index: 1;
     display: block;
-    border-radius: 50%;
+    width: 70%;
+    height: 70%;
     -o-object-fit: contain;
        object-fit: contain;
     -o-object-position: center;
