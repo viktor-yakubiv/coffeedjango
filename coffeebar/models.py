@@ -12,21 +12,18 @@ class Account(models.Model):
 
     # owner of account
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.CharField(max_length=254)
 
     # status of account
     #   typically look up only for open accounts
-    status = models.IntegerField(choices=(
+    status = models.IntegerField(default=OPENED, choices=(
         (OPENED, 'Opened'),
         (CLOSED, 'Closed'),
         (SUSPENDED, 'Suspended'),
     ))
 
     def __str__(self):
-        User.l
-        display_name = 'Unknown'
-        if self.user.first_name or self.user.last_name:
-            display_name = (self.user.first_name + ' ' + self.user.last_name).strip()
-        return '%s (%s)' % (self.user.username, display_name)
+        return '%s (%s)' % (self.user.username, self.owner)
 
     @staticmethod
     def for_user(user):
@@ -46,11 +43,16 @@ class Account(models.Model):
         except (KeyError, Order.DoesNotExist):
             return []
 
+    def total(self):
+        total = OrderItem.objects.filter(order__account=self).aggregate(Sum('product__price'))['product__price__sum']
+        return total if total else 0.00
+
 
 class Product(models.Model):
     name = models.CharField(max_length=150)
     price = models.FloatField(default=0.00)
     image = models.CharField(max_length=128, blank=True)
+    available = models.BooleanField(default=True)
 
     def __str__(self):
         return '%s ($%1.2f)' % (self.name, self.price)
@@ -124,4 +126,3 @@ class OrderItem(models.Model):
     def total(self):
         toppings_price = self.get_related().aggregate(Sum('product__price'))['product__price__sum']
         return self.product.price + (toppings_price if toppings_price else 0.00)
-

@@ -13,6 +13,8 @@
                             <th>ID</th>
                             <th>Date</th>
                             <th class="text-xs-right">Total</th>
+                            <th>Status</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -21,6 +23,10 @@
                                 <th>{{ order.id }}</th>
                                 <td>{{ order.datetime }}</td>
                                 <td class="text-xs-right">${{ order.total|floatformat:2 }}</td>
+                                <td>{{ order.get_status_display }}</td>
+                                <td>
+                                    <a href="{% url 'coffeebar:order:details' order.id %}">Details</a>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>

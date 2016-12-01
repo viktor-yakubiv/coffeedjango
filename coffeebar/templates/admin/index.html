@@ -1,0 +1,13 @@
+{% extends '../layouts/base.html' %}
+
+{% block content %}
+
+    <div class="card card-block">
+        <h1 class="card-title">Administration</h1>
+
+        <a class="card-link" href="{% url 'coffeebar:admin:accounts:index' %}">Accounts</a>
+        <a class="card-link" href="{% url 'coffeebar:admin:orders' %}">Orders</a>
+        <a class="card-link" href="{% url 'coffeebar:admin:products:index' %}">Products</a>
+    </div>
+
+{% endblock %}

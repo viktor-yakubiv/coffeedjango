@@ -35,7 +35,7 @@
 @import "card";
 // @import "breadcrumb";
 // @import "pagination";
-// @import "tags";
+@import "tags";
 @import "jumbotron";
 @import "alert";
 // @import "progress";
@@ -45,10 +45,10 @@
 @import "close";
 
 // Components w/ JavaScript
-@import "modal";
-@import "tooltip";
-@import "popover";
-@import "carousel";
+// @import "modal";
+// @import "tooltip";
+// @import "popover";
+// @import "carousel";
 
 // Utility classes
 @import "utilities";

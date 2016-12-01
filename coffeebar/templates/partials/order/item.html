@@ -1,5 +1,5 @@
 <li class="list-group-item">
-    <form action="{% url 'coffeebar:order_remove' %}">
+    <form action="{% url 'coffeebar:order:remove' %}">
         {% csrf_token %}
         <input type="hidden" name="item_id" value="{{ item.id }}">
         <button class="close float-xs-right" type="submit" aria-label="Remove" title="Remove this item">

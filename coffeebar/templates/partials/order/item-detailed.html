@@ -7,13 +7,15 @@
         {% endif %}
     </div>
     <div class="media-body">
-        <form action="{% url 'coffeebar:order_remove' %}">
-            {% csrf_token %}
-            <input type="hidden" name="item_id" value="{{ item.id }}">
-            <button class="close float-xs-right" type="submit" aria-label="Remove" title="Remove this item">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </form>
+        {% if edit %}
+            <form action="{% url 'coffeebar:order:remove' %}">
+                {% csrf_token %}
+                <input type="hidden" name="item_id" value="{{ item.id }}">
+                <button class="close float-xs-right" type="submit" aria-label="Remove" title="Remove this item">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </form>
+        {% endif %}
 
         <h3>{{ item.product.name }}</h3>
         <p>${{ item.product.price|floatformat:2 }}</p>

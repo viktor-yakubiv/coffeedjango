@@ -3,19 +3,35 @@
 {% block content %}
     <div class="card">
         <div class="card-block">
-            <h1>Current order</h1>
+            <h1>
+                {% if edit %}
+                    Current order
+                {% else %}
+                    Order #{{ order.id }}
+                    <span class="tag tag-primary">{{ order.get_status_display }}</span>
+                {% endif %}
+            </h1>
         </div>
-        <div class="card-block">
-            {% for item in items %}
-                {% include '../partials/order/item-detailed.html' %}
-            {% endfor %}
-        </div>
-        <div class="card-block">
-            <form method="post" action="{% url 'coffeebar:order_checkout' %}">
-                {% csrf_token %}
-                <button class="btn btn-primary btn-lg btn-block" type="submit">Checkout</button>
-            </form>
-        </div>
+        {% if items %}
+            <div class="card-block">
+                {% for item in items %}
+                    {% include '../partials/order/item-detailed.html' %}
+                {% endfor %}
+            </div>
+            {% if edit %}
+                <div class="card-block">
+                    <form method="post" action="{% url 'coffeebar:order:checkout' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-primary btn-lg btn-block" type="submit">Checkout</button>
+                    </form>
+                </div>
+            {% endif %}
+        {% elif edit %}
+            <div class="card-block">
+                <p class="card-text">Order is empty</p>
+                <a class="btn btn-primary btn-lg btn-block" href="{% url 'coffeebar:index' %}">Add something</a>
+            </div>
+        {% endif %}
     </div>
 
 {% endblock %}

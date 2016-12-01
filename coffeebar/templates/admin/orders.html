@@ -1,0 +1,74 @@
+{% extends '../layouts/base.html' %}
+
+{% block content %}
+
+    <div class="card">
+        {% if undone %}
+            <div class="card-block">
+                <h2 class="card-title">
+                    <a href="#undone-orders" data-toggle="collapse" aria-expanded="true">Current orders</a>
+                </h2>
+                <div id="undone-orders" class="table-responsive collapse in">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Account</th>
+                            <th>Date and Time</th>
+                            <th class="text-xs-right">Total</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for order in undone %}
+                            <tr>
+                                <th>{{ order.account }}</th>
+                                <td>{{ order.datetime }}</td>
+                                <td class="text-xs-right">${{ order.total|floatformat:2 }}</td>
+                                <td>
+                                    <form class="form-inline" action="{% url 'coffeebar:admin:orders:update' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                                        <span class="tag tag-default mr-1">{{ order.get_status_display }}</span>
+                                        <button class="btn btn-sm btn-primary" type="submit">
+                                            Next
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if done %}
+            <div class="card-block">
+                <h2 class="card-title">
+                    <a href="#done-orders" data-toggle="collapse" aria-expanded="true">Done orders</a>
+                </h2>
+                <div id="done-orders" class="table-responsive collapse">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Account</th>
+                            <th>Date and Time</th>
+                            <th class="text-xs-right">Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for order in done %}
+                            <tr>
+                                <th>{{ order.account }}</th>
+                                <td>{{ order.datetime }}</td>
+                                <td class="text-xs-right">${{ order.total|floatformat:2 }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

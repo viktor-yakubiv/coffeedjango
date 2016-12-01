@@ -1,0 +1,68 @@
+{% extends '../layouts/base.html' %}
+
+{% block content %}
+    <div class="row flex-items-xs-top">
+        <div class="col-xs-12 col-sm-7 col-lg-8">
+            <div class="card card-block">
+                <h2 class="card-title">Drinks</h2>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th class="text-xs-right">Price</th>
+                            <th class="text-xs-right">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for drink in drinks %}
+                            <tr>
+                                <th class="text-xs-right">{{ drink.product.id }}</th>
+                                <td>{{ drink.product.name }}</td>
+                                <td class="text-xs-right">${{ drink.product.price|floatformat:2 }}</td>
+                                <td class="text-xs-right">
+                                    <a class="btn btn-{% if drink.product.available %}secondary{% else %}success{% endif %} btn-sm" href="{% url 'coffeebar:admin:products:toggle' drink.product.id %}">
+                                        {% if drink.product.available %}Disable{% else %}Enable{% endif %}
+                                    </a>
+                                    <a class="btn btn-primary btn-sm" href="{% url 'coffeebar:admin:products:edit' drink.product.id %}">Edit</a>
+                                    <a class="btn btn-danger btn-sm" href="{% url 'coffeebar:admin:products:delete' drink.product.id %}">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-5 col-lg-4">
+            <div class="card">
+                <div class="card-block">
+                    <h2 class="card-title">Add drink</h2>
+                    <form action="{% url 'coffeebar:admin:products:add' %}">
+                        {% csrf_token %}
+                        <fieldset class="form-group">
+                            <label for="drink-name">Name</label>
+                            <input class="form-control" id="drink-name" type="text" name="name" placeholder="Awesome drink">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="drink-price">Price</label>
+                            <input class="form-control" id="drink-price" type="number" name="price" min="0.00" step="0.01" value="0.00">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="drink-image">Image</label>
+                            <select class="form-control" id="drink-image" name="image">
+                                <option value="">None</option>
+                                {% for image in images %}
+                                    <option value="{{ image }}">{{ image }}</option>
+                                {% endfor %}
+                            </select>
+                        </fieldset>
+                        <button class="btn btn-block btn-primary" type="submit">Add drink</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

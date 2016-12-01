@@ -25,19 +25,19 @@
                         {% load urls %}
                         <div class="nav navbar-nav">
                             <a class="nav-item btn btn-primary {% active request 'coffeebar:index' %}" href="{% url 'coffeebar:index' %}">Coffee Menu</a>
-                            <a class="nav-item nav-link {% active request 'coffeebar:order_list' %}" href="{% url 'coffeebar:order_list' %}">Orders</a>
+                            <a class="nav-item nav-link {% active request 'coffeebar:order:list' %}" href="{% url 'coffeebar:order:list' %}">Orders</a>
 
-                            {% if request.user %}
+                            {% if request.user.is_superuser %}
                                 <div class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="http://example.com"
-                                       id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                                    <a class="nav-link dropdown-toggle {% active request 'coffeebar:admin:index' %}" href="{% url 'coffeebar:admin:index' %}"
+                                       id="admin-dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                                        aria-expanded="false">
                                         Administration
                                     </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        <a class="dropdown-item" href="#">Orders</a>
-                                        <a class="dropdown-item" href="#">Accounts</a>
-                                        <a class="dropdown-item" href="#">Products</a>
+                                    <div class="dropdown-menu" aria-labelledby="admin-dropdown-toggle">
+                                        <a class="dropdown-item {% active request 'coffeebar:admin:accounts:index' %}" href="{% url 'coffeebar:admin:accounts:index' %}">Accounts</a>
+                                        <a class="dropdown-item {% active request 'coffeebar:admin:orders:index' %}" href="{% url 'coffeebar:admin:orders:index' %}">Orders</a>
+                                        <a class="dropdown-item {% active request 'coffeebar:admin:products:index' %}" href="{% url 'coffeebar:admin:products:index' %}">Products</a>
                                     </div>
                                 </div>
                             {% endif %}

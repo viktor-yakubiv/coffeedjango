@@ -9,7 +9,7 @@
             <div class="row flex-items-xs-top">
                 {% for drink in drinks %}
                     <div class="col-xs-12 col-sm-6 col-lg-4">
-                        <form class="card" action="{% url 'coffeebar:order_add' %}">
+                        <form class="card" action="{% url 'coffeebar:order:add' %}">
                             {% csrf_token %}
                             <input type="hidden" name="product_id" value="{{ drink.product.id }}">
 
@@ -61,10 +61,10 @@
                     </ul>
 
                     <div class="card-block">
-                        <form action="{% url 'coffeebar:order_checkout' %}">
+                        <form action="{% url 'coffeebar:order:checkout' %}">
                             {% csrf_token %}
                             <button class="btn btn-primary">Checkout</button>
-                            <a class="btn btn-link" href="{% url 'coffeebar:order' %}">Details</a>
+                            <a class="btn btn-link" href="{% url 'coffeebar:order:index' %}">Details</a>
                         </form>
                     </div>
                 {% else %}

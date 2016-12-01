@@ -1,0 +1,110 @@
+{% extends '../layouts/base.html' %}
+
+{% block content %}
+
+    <div class="row flex-items-xs-top">
+        <div class="col-xs-12 col-md-7 col-lg-8">
+            <div class="card">
+                {% if active %}
+                    <div class="card-block">
+                        <h2 class="card-title">
+                            <a href="#active-accounts" data-toggle="collapse" aria-expanded="true">Active accounts</a>
+                        </h2>
+                        <div id="active-accounts" class="table-responsive collapse in">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Date</th>
+                                    <th>Room</th>
+                                    <th>Owner</th>
+                                    <th class="text-xs-right">Total</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for account in active %}
+                                    <tr>
+                                        <th>{{ account.id }}</th>
+                                        <td>{{ account.datetime }}</td>
+                                        <td>{{ account.user.username }}</td>
+                                        <td>{{ account.owner }}</td>
+                                        <td class="text-xs-right">${{ account.total|floatformat:2 }}</td>
+                                        <td>
+                                            <form action="{% url 'coffeebar:admin:accounts:close' %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="account_id" value="{{ account.id }}">
+                                                <button class="btn btn-sm btn-primary" type="submit">Close</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if closed %}
+                    <div class="card-block">
+                        <h2 class="card-title">
+                            <a href="#closed-accounts" data-toggle="collapse" aria-expanded="false">Closed accounts</a>
+                        </h2>
+                        <div id="closed-accounts" class="table-responsive collapse">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Date</th>
+                                        <th>Room</th>
+                                        <th>Owner</th>
+                                        <th class="text-xs-right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for account in closed %}
+                                        <tr>
+                                            <th>{{ account.id }}</th>
+                                            <td>{{ account.datetime }}</td>
+                                            <td>{{ account.user.username }}</td>
+                                            <td>{{ account.owner }}</td>
+                                            <td class="text-xs-right">${{ account.total|floatformat:2 }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-5 col-lg-4">
+            <div class="card card-block">
+                <h2 class="card-title">Open new</h2>
+                <form method="post" action="{% url 'coffeebar:admin:accounts:open' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="open-room">Room number</label>
+                        <select class="form-control" id="open-room" name="user_id">
+                            {% for user in users %}
+                                <option value="{{ user.id }}">{{ user.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="open-name">Owner name</label>
+                        <input class="form-control" id="open-name" type="text" name="owner" placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="open-name">PIN Code</label>
+                        <input class="form-control" id="open-name" type="text" name="password" placeholder="1111">
+                    </div>
+                    <div class="form-group mb-0">
+                        <button class="btn btn-primary btn-block" type="submit">Open</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
