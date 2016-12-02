@@ -125,4 +125,4 @@ class OrderItem(models.Model):
 
     def total(self):
         toppings_price = self.get_related().aggregate(Sum('product__price'))['product__price__sum']
-        return self.product.price + (toppings_price if toppings_price else 0.00)
+        return self.quantity * (self.product.price + (toppings_price if toppings_price else 0.00))
