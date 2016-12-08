@@ -100,7 +100,13 @@ class Order(models.Model):
         return '%d from %s' % (self.id, self.datetime)
 
     def get_items(self):
-        return OrderItem.objects.filter(order=self, parent=None)
+        items = OrderItem.objects.filter(order=self, parent=None)
+        if self.status == Order.NEW:
+            return items
+        permanent_items = []
+        for i in items:
+            permanent_items.append(OrderItemPermanent(i))
+        return permanent_items
 
     def total(self):
         order_total = OrderItem.objects.filter(order=self).aggregate(Sum('product__price'))['product__price__sum']
@@ -126,3 +132,9 @@ class OrderItem(models.Model):
     def total(self):
         toppings_price = self.get_related().aggregate(Sum('product__price'))['product__price__sum']
         return self.quantity * (self.product.price + (toppings_price if toppings_price else 0.00))
+
+
+class OrderItemPermanent(OrderItem):
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        raise Exception('Illegal operation')
