@@ -24,20 +24,20 @@
 
                         {% load urls %}
                         <div class="nav navbar-nav">
-                            <a class="nav-item btn btn-primary {% active request 'coffeebar:index' %}" href="{% url 'coffeebar:index' %}">{% trans 'Coffee Menu' %}</a>
-                            <a class="nav-item nav-link {% active request 'coffeebar:order:list' %}" href="{% url 'coffeebar:order:list' %}">{% trans 'Orders' %}</a>
+                            <a class="nav-item btn btn-primary {% active 'coffeebar:index' %}" href="{% url 'coffeebar:index' %}">{% trans 'Coffee Menu' %}</a>
+                            <a class="nav-item nav-link {% active 'coffeebar:order:list' %}" href="{% url 'coffeebar:order:list' %}">{% trans 'Orders' %}</a>
 
                             {% if request.user.is_superuser %}
                                 <div class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle {% active request 'coffeebar:admin:index' %}" href="{% url 'coffeebar:admin:index' %}"
+                                    <a class="nav-link dropdown-toggle {% active 'coffeebar:admin:index' %}" href="{% url 'coffeebar:admin:index' %}"
                                        id="admin-dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                                        aria-expanded="false">
                                         {% trans 'Administration' %}
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="admin-dropdown-toggle">
-                                        <a class="dropdown-item {% active request 'coffeebar:admin:accounts:index' %}" href="{% url 'coffeebar:admin:accounts:index' %}">{% trans 'Account' %}</a>
-                                        <a class="dropdown-item {% active request 'coffeebar:admin:orders:index' %}" href="{% url 'coffeebar:admin:orders:index' %}">{% trans 'Orders' %}</a>
-                                        <a class="dropdown-item {% active request 'coffeebar:admin:products:index' %}" href="{% url 'coffeebar:admin:products:index' %}">{% trans 'Products' %}</a>
+                                        <a class="dropdown-item {% active 'coffeebar:admin:accounts:index' %}" href="{% url 'coffeebar:admin:accounts:index' %}">{% trans 'Account' %}</a>
+                                        <a class="dropdown-item {% active 'coffeebar:admin:orders:index' %}" href="{% url 'coffeebar:admin:orders:index' %}">{% trans 'Orders' %}</a>
+                                        <a class="dropdown-item {% active 'coffeebar:admin:products:index' %}" href="{% url 'coffeebar:admin:products:index' %}">{% trans 'Products' %}</a>
                                     </div>
                                 </div>
                             {% endif %}
@@ -47,13 +47,14 @@
                             <div class="nav-item dropdown">
                                 <button class="nav-link btn btn-outline-primary dropdown-toggle" id="lang-dropdown"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    {{ get_current_language }}
+                                    {% get_current_language as CURRENT_LANG %}{{ CURRENT_LANG|language_name_local }}
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="lang-dropdown">
-                                    {% for lang_code, lang_name in get_available_languages %}
+                                    {% get_available_languages as AVAILABLE_LANGS %}
+                                    {% for lang_code, lang_name in AVAILABLE_LANGS %}
                                         {% language lang_code %}
                                             <a class="dropdown-item"
-                                               href="{% url 'category' slug=category.slug %}">{{ lang_code|language_name_local }}</a>
+                                               href="{% url 'coffeebar:index' %}">{{ lang_code|language_name_local }}</a>
                                         {% endlanguage %}
                                     {% endfor %}
                                 </div>
