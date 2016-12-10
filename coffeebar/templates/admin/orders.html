@@ -1,21 +1,23 @@
 {% extends '../layouts/base.html' %}
 
+{% load i18n %}
+
 {% block content %}
 
     <div class="card">
         {% if undone %}
             <div class="card-block">
                 <h2 class="card-title">
-                    <a href="#undone-orders" data-toggle="collapse" aria-expanded="true">Current orders</a>
+                    <a href="#undone-orders" data-toggle="collapse" aria-expanded="true">{% trans 'Current orders' %}</a>
                 </h2>
                 <div id="undone-orders" class="table-responsive collapse in">
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            <th>Account</th>
-                            <th>Date and Time</th>
-                            <th class="text-xs-right">Total</th>
-                            <th>Status</th>
+                            <th>{% trans 'Account' %}</th>
+                            <th>{% trans 'Date and Time' %}</th>
+                            <th class="text-xs-right">{% trans 'Total' %}</th>
+                            <th>{% trans 'Status' %}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -30,7 +32,7 @@
                                         <input type="hidden" name="order_id" value="{{ order.id }}">
                                         <span class="tag tag-default mr-1">{{ order.get_status_display }}</span>
                                         <button class="btn btn-sm btn-primary" type="submit">
-                                            Next
+                                            {% trans 'Next' %}
                                         </button>
                                     </form>
                                 </td>
@@ -45,15 +47,15 @@
         {% if done %}
             <div class="card-block">
                 <h2 class="card-title">
-                    <a href="#done-orders" data-toggle="collapse" aria-expanded="true">Done orders</a>
+                    <a href="#done-orders" data-toggle="collapse" aria-expanded="true">{% trans 'Done orders' %}</a>
                 </h2>
                 <div id="done-orders" class="table-responsive collapse">
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            <th>Account</th>
-                            <th>Date and Time</th>
-                            <th class="text-xs-right">Total</th>
+                            <th>{% trans 'Account' %}</th>
+                            <th>{% trans 'Date and Time' %}</th>
+                            <th class="text-xs-right">{% trans 'Total' %}</th>
                         </tr>
                         </thead>
                         <tbody>

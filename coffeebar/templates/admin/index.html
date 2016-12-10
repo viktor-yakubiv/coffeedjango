@@ -1,13 +1,15 @@
 {% extends '../layouts/base.html' %}
 
+{% load i18n %}
+
 {% block content %}
 
     <div class="card card-block">
-        <h1 class="card-title">Administration</h1>
+        <h1 class="card-title">{% trans 'Administration' %}</h1>
 
-        <a class="card-link" href="{% url 'coffeebar:admin:accounts:index' %}">Accounts</a>
-        <a class="card-link" href="{% url 'coffeebar:admin:orders' %}">Orders</a>
-        <a class="card-link" href="{% url 'coffeebar:admin:products:index' %}">Products</a>
+        <a class="card-link" href="{% url 'coffeebar:admin:accounts:index' %}">{% trans 'Accounts' %}</a>
+        <a class="card-link" href="{% url 'coffeebar:admin:orders' %}">{% trans 'Orders' %}</a>
+        <a class="card-link" href="{% url 'coffeebar:admin:products:index' %}">{% trans 'Products' %}</a>
     </div>
 
 {% endblock %}

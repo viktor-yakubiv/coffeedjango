@@ -1,5 +1,6 @@
 {% extends 'layouts/base.html' %}
 
+{% load i18n %}
 {% load static %}
 
 {% block content %}
@@ -40,7 +41,7 @@
                             </ul>
 
                             <div class="card-block">
-                                <button class="btn btn-primary btn-block order-btn" type="submit">Add to order</button>
+                                <button class="btn btn-primary btn-block order-btn" type="submit">{% trans 'Add to order' %}</button>
                             </div>
                         </form>
                     </div>
@@ -51,7 +52,7 @@
         <div class="col-xs-12 col-sm-5 col-lg-4">
             <div class="card cart">
                 <div class="card-block">
-                    <h2 class="card-title cart-title d-inline-block">Order</h2>
+                    <h2 class="card-title cart-title d-inline-block">{% trans 'Order' %}</h2>
                 </div>
                 {% if order.get_items %}
                     <ul class="list-group list-group-flush">
@@ -63,13 +64,13 @@
                     <div class="card-block">
                         <form action="{% url 'coffeebar:order:checkout' %}">
                             {% csrf_token %}
-                            <button class="btn btn-primary">Checkout</button>
-                            <a class="btn btn-link" href="{% url 'coffeebar:order:index' %}">Details</a>
+                            <button class="btn btn-primary">{% trans 'Checkout' %}</button>
+                            <a class="btn btn-link" href="{% url 'coffeebar:order:index' %}">{% trans 'Details' %}</a>
                         </form>
                     </div>
                 {% else %}
                     <div class="card-block">
-                        <p class="card-text">You have not chosen anything</p>
+                        <p class="card-text">{% trans 'You have not chosen anything' %}</p>
                     </div>
                 {% endif %}
             </div>

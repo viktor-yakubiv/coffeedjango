@@ -1,18 +1,20 @@
 {% extends '../layouts/base.html' %}
 
+{% load i18n %}
+
 {% block content %}
     <div class="row flex-items-xs-top">
         <div class="col-xs-12 col-sm-7 col-lg-8">
             <div class="card card-block">
-                <h2 class="card-title">Drinks</h2>
+                <h2 class="card-title">{% trans 'Drinks' %}</h2>
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th class="text-xs-right">Price</th>
-                            <th class="text-xs-right">Actions</th>
+                            <th>{% trans 'ID' %}</th>
+                            <th>{% trans 'Name' %}</th>
+                            <th class="text-xs-right">{% trans 'Price' %}</th>
+                            <th class="text-xs-right">{% trans 'Actions' %}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -23,7 +25,7 @@
                                 <td class="text-xs-right">${{ drink.product.price|floatformat:2 }}</td>
                                 <td class="text-xs-right">
                                     <a class="btn btn-{% if drink.product.available %}secondary{% else %}success{% endif %} btn-sm" href="{% url 'coffeebar:admin:products:toggle' drink.product.id %}">
-                                        {% if drink.product.available %}Disable{% else %}Enable{% endif %}
+                                        {% if drink.product.available %}{% trans 'Disable' %}{% else %}{% trans 'Enable' %}{% endif %}
                                     </a>
                                     <a class="btn btn-primary btn-sm" href="{% url 'coffeebar:admin:products:edit' drink.product.id %}">Edit</a>
                                     <a class="btn btn-danger btn-sm" href="{% url 'coffeebar:admin:products:delete' drink.product.id %}">Delete</a>
@@ -38,27 +40,27 @@
         <div class="col-xs-12 col-sm-5 col-lg-4">
             <div class="card">
                 <div class="card-block">
-                    <h2 class="card-title">Add drink</h2>
+                    <h2 class="card-title">{% trans 'Add drink' %}</h2>
                     <form action="{% url 'coffeebar:admin:products:add' %}">
                         {% csrf_token %}
                         <fieldset class="form-group">
-                            <label for="drink-name">Name</label>
+                            <label for="drink-name">{% trans 'Name' %}</label>
                             <input class="form-control" id="drink-name" type="text" name="name" placeholder="Awesome drink">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="drink-price">Price</label>
+                            <label for="drink-price">{% trans 'Price' %}</label>
                             <input class="form-control" id="drink-price" type="number" name="price" min="0.00" step="0.01" value="0.00">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="drink-image">Image</label>
+                            <label for="drink-image">{% trans 'Image' %}</label>
                             <select class="form-control" id="drink-image" name="image">
-                                <option value="">None</option>
+                                <option value="">{% trans 'None' %}</option>
                                 {% for image in images %}
                                     <option value="{{ image }}">{{ image }}</option>
                                 {% endfor %}
                             </select>
                         </fieldset>
-                        <button class="btn btn-block btn-primary" type="submit">Add drink</button>
+                        <button class="btn btn-block btn-primary" type="submit">{% trans 'Add drink' %}</button>
                     </form>
                 </div>
             </div>

@@ -1,9 +1,10 @@
 {% extends 'layouts/info.html' %}
 
+{% load i18n %}
 {% load static %}
 
 {% block content %}
 
-    <div class="alert alert-info">You are logged out</div>
+    <div class="alert alert-info">{% trans 'You are logged out' %}</div>
 
 {% endblock %}

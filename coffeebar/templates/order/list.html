@@ -1,19 +1,21 @@
 {% extends "layouts/base.html" %}
 
+{% load i18n %}
+
 {% block content %}
     <div class="card">
         <div class="card-block">
-            <h1>Your orders</h1>
+            <h1>{% trans 'Your orders' %}</h1>
         </div>
         <div class="card-block">
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Date</th>
-                            <th class="text-xs-right">Total</th>
-                            <th>Status</th>
+                            <th>{% trans 'ID' %}</th>
+                            <th>{% trans 'Date' %}</th>
+                            <th class="text-xs-right">{% trans 'Total' %}</th>
+                            <th>{% trans 'Status' %}</th>
                             <th></th>
                         </tr>
                     </thead>

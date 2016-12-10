@@ -1,19 +1,19 @@
 <!doctype html>
 
+{% load i18n %}
 {% load static %}
 
 <html class="no-js" lang="en">
 <head>
         {% include '../partials/head/meta.html' %}
 
-        <title>Air Coffee</title>
+        <title>{% trans 'Air Coffee' %}</title>
 
         {% include '../partials/head/links.html' %}
     </head>
     <body>
         {% include '../partials/browser.html' %}
 
-        {% load static %}
         <main class="main pt-3 mt-3">
             <header class="header">
                 <nav class="navbar navbar-light bg-primary navbar-fixed-top navbar-full header-navbar">
@@ -24,33 +24,48 @@
 
                         {% load urls %}
                         <div class="nav navbar-nav">
-                            <a class="nav-item btn btn-primary {% active request 'coffeebar:index' %}" href="{% url 'coffeebar:index' %}">Coffee Menu</a>
-                            <a class="nav-item nav-link {% active request 'coffeebar:order:list' %}" href="{% url 'coffeebar:order:list' %}">Orders</a>
+                            <a class="nav-item btn btn-primary {% active request 'coffeebar:index' %}" href="{% url 'coffeebar:index' %}">{% trans 'Coffee Menu' %}</a>
+                            <a class="nav-item nav-link {% active request 'coffeebar:order:list' %}" href="{% url 'coffeebar:order:list' %}">{% trans 'Orders' %}</a>
 
                             {% if request.user.is_superuser %}
                                 <div class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle {% active request 'coffeebar:admin:index' %}" href="{% url 'coffeebar:admin:index' %}"
                                        id="admin-dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                                        aria-expanded="false">
-                                        Administration
+                                        {% trans 'Administration' %}
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="admin-dropdown-toggle">
-                                        <a class="dropdown-item {% active request 'coffeebar:admin:accounts:index' %}" href="{% url 'coffeebar:admin:accounts:index' %}">Accounts</a>
-                                        <a class="dropdown-item {% active request 'coffeebar:admin:orders:index' %}" href="{% url 'coffeebar:admin:orders:index' %}">Orders</a>
-                                        <a class="dropdown-item {% active request 'coffeebar:admin:products:index' %}" href="{% url 'coffeebar:admin:products:index' %}">Products</a>
+                                        <a class="dropdown-item {% active request 'coffeebar:admin:accounts:index' %}" href="{% url 'coffeebar:admin:accounts:index' %}">{% trans 'Account' %}</a>
+                                        <a class="dropdown-item {% active request 'coffeebar:admin:orders:index' %}" href="{% url 'coffeebar:admin:orders:index' %}">{% trans 'Orders' %}</a>
+                                        <a class="dropdown-item {% active request 'coffeebar:admin:products:index' %}" href="{% url 'coffeebar:admin:products:index' %}">{% trans 'Products' %}</a>
                                     </div>
                                 </div>
                             {% endif %}
                         </div>
 
-                        <div class="nav float-xs-right">
+                        <div class="nav navbar-nav float-xs-right">
+                            <div class="nav-item dropdown">
+                                <button class="nav-link btn btn-outline-primary dropdown-toggle" id="lang-dropdown"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{ get_current_language }}
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="lang-dropdown">
+                                    {% for lang_code, lang_name in get_available_languages %}
+                                        {% language lang_code %}
+                                            <a class="dropdown-item"
+                                               href="{% url 'category' slug=category.slug %}">{{ lang_code|language_name_local }}</a>
+                                        {% endlanguage %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+
                             <div class="nav-item dropdown">
                                 <button class="nav-link btn btn-primary dropdown-toggle" id="usermenu-dropdown"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ request.user.username }}
                                 </button>
-                                <div class="dropdown-menu" aria-labelledby="usermenu-dropdown">
-                                    <a class="dropdown-item" href="{% url 'coffeebar:logout' %}">Logout</a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="usermenu-dropdown">
+                                    <a class="dropdown-item" href="{% url 'coffeebar:logout' %}">{% trans 'Logout' %}</a>
                                 </div>
                             </div>
                         </div>
@@ -66,7 +81,7 @@
 
             <footer class="footer navbar navbar-dark text-white">
                 <div class="container">
-                    <span class="copy float-sm-left">© {% now 'Y' %} Air Coffee</span>
+                    <span class="copy float-sm-left">© {% now 'Y' %} {% trans 'Air Coffee' %}</span>
                     <a class="author float-sm-right" href="http://www.yakubiv.com">www.yakubiv.com</a>
                 </div>
             </footer>

@@ -1,9 +1,11 @@
 {% extends 'layouts/info.html' %}
 
+{% load i18n %}
+
 {% block content %}
 
     <div class="alert alert-info">
-        <h1>Error occur</h1>
+        <h1>{% trans 'Error occur' %}</h1>
 
         <ul>
             {% for error in errors %}

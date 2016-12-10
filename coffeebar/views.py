@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.utils.translation import ugettext_lazy as _
 
 import os
 
@@ -37,7 +38,7 @@ def index(request):
     except (KeyError, Account.DoesNotExist):
         if request.user.is_superuser:
             return redirect('coffeebar:admin:accounts:index')
-        return error(request, "You have no account. Please, contact with administrator")
+        return error(request, _("You have no account. Please, contact with administrator"))
 
     drinks = Drink.objects.all().exclude(product__available=False)
     order = account.new_order()
@@ -54,7 +55,7 @@ def order_details(request, order_id=None):
     if order_id is not None:
         order = Order.objects.get(pk=order_id)
         if order.account != account:
-            return error(request, "Access denied")
+            return error(request, _("Access denied"))
     else:
         order = account.new_order()
     context['edit'] = order.id == account.new_order().id
