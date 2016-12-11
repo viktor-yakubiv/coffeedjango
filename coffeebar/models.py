@@ -103,7 +103,8 @@ class Order(models.Model):
         return OrderItem.objects.filter(order=self, parent=None)
 
     def total(self):
-        order_total = OrderItem.objects.filter(order=self).aggregate(Sum('product__price'))['product__price__sum']
+        order_total = OrderItem.objects.filter(order=self).aggregate(
+            total=Sum('product__price', field='product__price*quantity'))['total']
         return order_total if order_total else 0.00
 
 
@@ -124,5 +125,6 @@ class OrderItem(models.Model):
         return related
 
     def total(self):
-        toppings_price = self.get_related().aggregate(Sum('product__price'))['product__price__sum']
+        toppings_price = self.get_related().aggregate(
+            total=Sum('product__price', field='product__price*quantity'))['total']
         return self.quantity * (self.product.price + (toppings_price if toppings_price else 0.00))
