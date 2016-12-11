@@ -1,3 +1,4 @@
+import logging
 from django.conf import settings
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
@@ -11,18 +12,24 @@ from .models import *
 
 login_url = reverse_lazy('coffeebar:login')
 
+logger = logging.getLogger(__name__)
+
 
 # helper views
 
 def info(request, messages):
     if type(messages) != 'list':
         messages = [messages]
+    for message in messages:
+        logger.info('User<%s> notice: %s' % (request.username, message))
     return render(request, 'info.html', {'messages': messages})
 
 
 def error(request, messages):
     if type(messages) != 'list':
         messages = [messages]
+    for message in messages:
+        logger.error('User<%s> error: %s' % (request.username, message))
     return render(request, 'error.html', {'errors': messages})
 
 
@@ -30,11 +37,16 @@ def error(request, messages):
 
 def login(request, template_name='login.html'):
     login_result = auth_views.login(request, template_name=template_name)
+    if request.user.is_authenticated():
+        logging.info('User %s is logged in' % request.user.username)
     return login_result
 
 
 def logout(request, template_name='logout.html'):
+    username = request.user.username
     logout_result = auth_views.logout(request, template_name=template_name)
+    if not request.user.is_authenticated():
+        logging.info('User %s is logged out' % username)
     return logout_result
 
 
@@ -113,6 +125,7 @@ def order_checkout(request):
     order = Account.for_user(request.user).new_order()
     order.status = Order.WAITING
     order.save()
+    logger.info('User %s checked out for $%.2f' % (request.user.username, order.total()))
     return info(request, 'Thank you. Your order is received')
 
 
