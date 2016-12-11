@@ -1,5 +1,4 @@
 from django.conf.urls import url, include
-from django.contrib.auth import views as auth_views
 
 from . import views
 
@@ -43,6 +42,6 @@ urlpatterns = [
     url(r'admin/', include(admin, namespace='admin')),
 
     # django auth
-    url(r'^login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
-    url(r'^logout/$', auth_views.logout, {'template_name': 'logout.html'}, name='logout'),
+    url(r'^login/$', views.login, {'template_name': 'login.html'}, name='login'),
+    url(r'^logout/$', views.logout, {'template_name': 'logout.html'}, name='logout'),
 ]

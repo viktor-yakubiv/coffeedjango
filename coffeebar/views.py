@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -23,6 +24,18 @@ def error(request, messages):
     if type(messages) != 'list':
         messages = [messages]
     return render(request, 'error.html', {'errors': messages})
+
+
+# login views
+
+def login(request, template_name='login.html'):
+    login_result = auth_views.login(request, template_name=template_name)
+    return login_result
+
+
+def logout(request, template_name='logout.html'):
+    logout_result = auth_views.logout(request, template_name=template_name)
+    return logout_result
 
 
 # start view
@@ -125,11 +138,15 @@ def admin_accounts(request, action='list'):
         account.save()
         return redirect('coffeebar:admin:accounts:index')
 
+    assigned_accounts = []
+    for account in Account.objects.filter(status=Account.OPENED):
+        assigned_accounts.append(account.user.id)
+
     context = {
         'active': Account.objects.all().exclude(status=Account.CLOSED),
         'closed': Account.objects.filter(status=Account.CLOSED),
 
-        'users': User.objects.all(),
+        'users': User.objects.exclude(id__in=assigned_accounts),
     }
     return render(request, 'admin/accounts.html', context)
 
