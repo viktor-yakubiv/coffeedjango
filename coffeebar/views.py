@@ -37,16 +37,14 @@ def error(request, messages):
 
 def login(request, template_name='login.html'):
     login_result = auth_views.login(request, template_name=template_name)
-    if request.user.is_authenticated():
-        logging.info('User %s is logged in' % request.user.username)
+    logging.info('User %s is logged in' % request.user.username)
     return login_result
 
 
 def logout(request, template_name='logout.html'):
     username = request.user.username
     logout_result = auth_views.logout(request, template_name=template_name)
-    if not request.user.is_authenticated():
-        logging.info('User %s is logged out' % username)
+    logging.info('User %s is logged out' % username)
     return logout_result
 
 
@@ -58,15 +56,19 @@ def index(request):
     Lists all drinks in the system
     and shows current order (cart)
     """
-    try:
-        account = Account.for_user(request.user)
-    except (KeyError, Account.DoesNotExist):
-        if request.user.is_superuser:
-            return redirect('coffeebar:admin:accounts:index')
-        return error(request, _("You have no account. Please, contact with administrator"))
 
+    if 'order_id' in request.session:
+        order = Order.objects.get(pk=request.session['order_id'])
+    else:
+        try:
+            account = Account.for_user(request.user)
+        except (KeyError, Account.DoesNotExist):
+            if request.user.is_superuser:
+                return redirect('coffeebar:admin:accounts:index')
+            return error(request, _("You have no account. Please, contact with administrator"))
+        order = account.new_order()
+        request.session['order_id'] = order.id
     drinks = Drink.objects.all().exclude(product__available=False)
-    order = account.new_order()
     context = {'drinks': drinks, 'order': order, 'items': order.get_items()}
     return render(request, 'index.html', context)
 
@@ -122,10 +124,11 @@ def order_remove_item(request):
 
 @login_required(login_url=login_url)
 def order_checkout(request):
-    order = Account.for_user(request.user).new_order()
+    order = Order.objects.get(pk=request.session['order_id'])
     order.status = Order.WAITING
     order.save()
     logger.info('User %s checked out for $%.2f' % (request.user.username, order.total()))
+    request.session.pop('order_id', None)
     return info(request, 'Thank you. Your order is received')
 
 
