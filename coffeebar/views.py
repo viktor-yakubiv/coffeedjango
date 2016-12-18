@@ -1,14 +1,18 @@
-import logging
 from django.conf import settings
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
 import os
 
+from rest_framework import viewsets
+
+from .logger import *
 from .models import *
+from .serializers import *
 
 login_url = reverse_lazy('coffeebar:login')
 
@@ -21,7 +25,7 @@ def info(request, messages):
     if type(messages) != 'list':
         messages = [messages]
     for message in messages:
-        logger.info('User<%s> notice: %s' % (request.username, message))
+        logger.info('User<%s> notice: %s' % (request.user.username, message))
     return render(request, 'info.html', {'messages': messages})
 
 
@@ -29,7 +33,7 @@ def error(request, messages):
     if type(messages) != 'list':
         messages = [messages]
     for message in messages:
-        logger.error('User<%s> error: %s' % (request.username, message))
+        logger.error('User<%s> error: %s' % (request.user.username, message))
     return render(request, 'error.html', {'errors': messages})
 
 
@@ -113,12 +117,16 @@ def order_add_item(request):
             topping.product = Product.objects.get(id=product_id)
             topping.save()
 
+    if request.is_ajax():
+        return render(request, 'partials/order/item.html', {'item': drink})
     return redirect(request.META['HTTP_REFERER'])
 
 
 @login_required(login_url=login_url)
 def order_remove_item(request):
     OrderItem.objects.get(pk=request.GET['item_id']).delete()
+    if request.is_ajax():
+        return HttpResponse()
     return redirect(request.META['HTTP_REFERER'])
 
 
@@ -219,3 +227,10 @@ def admin_products(request, action='list', product_id=None):
     context['drinks'] = Drink.objects.all()
     context['toppings'] = Topping.objects.all()
     return render(request, 'admin/products.html', context)
+
+
+class DrinksViewSet(viewsets.ModelViewSet):
+    queryset = Drink.objects.all()
+    serializer_class = DrinkSerializer
+
+# class AccountsViewSet()

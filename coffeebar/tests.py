@@ -31,6 +31,7 @@ class OrderTest(TestCase):
             product.save()
             item = OrderItem(order=order, product=product, quantity=randint(1, 5))
             item.save()
+            total_expected += item.product.price * item.quantity
 
         # test non-empty order
         self.assertEqual(order.total(), total_expected, "order.total() error for non-empty orders")

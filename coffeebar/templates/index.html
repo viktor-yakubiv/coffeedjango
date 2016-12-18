@@ -10,7 +10,7 @@
             <div class="row flex-items-xs-top">
                 {% for drink in drinks %}
                     <div class="col-xs-12 col-sm-6 col-lg-4">
-                        <form class="card" action="{% url 'coffeebar:order:add' %}">
+                        <form class="card cart-add" action="{% url 'coffeebar:order:add' %}">
                             {% csrf_token %}
                             <input type="hidden" name="product_id" value="{{ drink.product.id }}">
 
@@ -50,29 +50,25 @@
         </div>
 
         <div class="col-xs-12 col-sm-5 col-lg-4">
-            <div class="card cart">
+            <div class="card cart {% if not order.get_items %}cart-empty{% endif %}">
                 <div class="card-block">
                     <h2 class="card-title cart-title d-inline-block">{% trans 'Order' %}</h2>
                 </div>
-                {% if order.get_items %}
-                    <ul class="list-group list-group-flush">
-                        {% for item in order.get_items %}
-                            {% include 'partials/order/item.html' %}
-                        {% endfor %}
-                    </ul>
-
-                    <div class="card-block">
-                        <form action="{% url 'coffeebar:order:checkout' %}">
-                            {% csrf_token %}
-                            <button class="btn btn-primary">{% trans 'Checkout' %}</button>
-                            <a class="btn btn-link" href="{% url 'coffeebar:order:index' %}">{% trans 'Details' %}</a>
-                        </form>
-                    </div>
-                {% else %}
-                    <div class="card-block">
-                        <p class="card-text">{% trans 'You have not chosen anything' %}</p>
-                    </div>
-                {% endif %}
+                <ul class="list-group list-group-flush cart-list" id="cart-order-list">
+                    {% for item in order.get_items %}
+                        {% include 'partials/order/item.html' %}
+                    {% endfor %}
+                </ul>
+                <div class="card-block cart-checkout-block">
+                    <form action="{% url 'coffeebar:order:checkout' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-primary">{% trans 'Checkout' %}</button>
+                        <a class="btn btn-link" href="{% url 'coffeebar:order:index' %}">{% trans 'Details' %}</a>
+                    </form>
+                </div>
+                <div class="card-block cart-empty-block">
+                    <p class="card-text">{% trans 'You have not chosen anything' %}</p>
+                </div>
             </div>
         </div>
     </div>

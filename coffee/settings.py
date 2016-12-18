@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -144,17 +145,48 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'file': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+        },
+        'django_debug': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'debug.log'),
+            'filename': os.path.join(BASE_DIR, 'django.debug.log'),
+        },
+        'django_info': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'django.info.log'),
+        },
+        'django_important': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'django.warning.log'),
+        },
+        'coffeebar_debug': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'coffeebar.debug.log'),
         },
     },
     'loggers': {
-        'coffeebar.views': {
-            'handlers': ['file'],
+        'coffeebar': {
+            'handlers': ['console', 'django_debug', 'coffeebar_debug'],
             'level': 'DEBUG',
-            'propagate': True,
+            'propagate': False,
+        },
+        'django': {
+            'handlers': ['console', 'django_debug', 'django_info', 'django_important'],
+            'level': 'DEBUG',
+            'propagate': False,
         },
     },
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAdminUser',
+    ],
+    'PAGE_SIZE': 10
 }

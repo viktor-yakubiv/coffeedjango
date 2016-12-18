@@ -1,0 +1,21 @@
+.cart {}
+
+.cart-empty-block {
+  display: none;
+
+  .cart-empty & {
+    display: block;
+  }
+}
+
+.cart-checkout-block {
+  .cart-empty & {
+    display: none;
+  }
+}
+
+.cart-list {
+  .cart-empty & {
+    display: none;
+  }
+}

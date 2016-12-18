@@ -1,4 +1,5 @@
 from django.conf.urls import url, include
+from rest_framework import routers
 
 from . import views
 
@@ -36,10 +37,19 @@ admin = [
     ], namespace='products')),
 ]
 
+api_router = routers.DefaultRouter()
+api_router.register(r'drinks', views.DrinksViewSet)
+# api_router.register(r'^order/', views.OrderAPI)
+api = [
+    url(r'^$', include(api_router.urls)),
+    url(r'^auth', include('rest_framework.urls', namespace='login')),
+]
+
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'order/', include(order, namespace='order')),
-    url(r'admin/', include(admin, namespace='admin')),
+    url(r'^order/', include(order, namespace='order')),
+    url(r'^admin/', include(admin, namespace='admin')),
+    url(r'^api/', include(api_router.urls, namespace='api')),
 
     # django auth
     url(r'^login/$', views.login, {'template_name': 'login.html'}, name='login'),
