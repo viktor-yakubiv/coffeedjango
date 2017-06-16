@@ -39,3 +39,7 @@ node_modules
 
 # Ignore database files
 *.sqlite3
+
+# Ignore venv and python cache
+__pycache__
+env
